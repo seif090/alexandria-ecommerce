@@ -1,0 +1,79 @@
+<nav class="bg-white shadow sticky top-0 z-50 py-4 px-6 h-20 flex items-center">
+    <div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4">
+      <div class="flex items-center gap-8">
+        <a routerLink="/" class="text-2xl font-black text-blue-700 tracking-tighter italic">ALEX CHANCE</a>
+        <div class="hidden md:flex gap-6 font-semibold text-gray-600">
+          <a routerLink="/" class="hover:text-blue-600 transition-colors">Marketplace</a>
+          <a href="#" class="hover:text-blue-600 transition-colors">Local Shops</a>
+          <a href="#" class="hover:text-blue-600 transition-colors font-black text-orange-600">Flash Deals</a>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Language Switcher -->
+        <div class="flex gap-2 mr-4 bg-gray-50 p-1.5 rounded-full border border-gray-100 shadow-sm">
+          <button (click)="switchLanguage('en')" class="w-8 h-8 rounded-full flex items-center justify-center font-black text-[10px] transition-all" [class.bg-blue-600]="translate.currentLang === 'en'" [class.text-white]="translate.currentLang === 'en'" [class.text-gray-400]="translate.currentLang !== 'en'">EN</button>
+          <button (click)="switchLanguage('ar')" class="w-8 h-8 rounded-full flex items-center justify-center font-black text-[10px] transition-all" [class.bg-blue-600]="translate.currentLang === 'ar'" [class.text-white]="translate.currentLang === 'ar'" [class.text-gray-400]="translate.currentLang !== 'ar'">عربي</button>
+        </div>
+
+        <!-- Cart Counter -->
+        <div class="relative mr-4 cursor-pointer group">
+          <div class="bg-gray-100 p-2.5 rounded-full group-hover:bg-gray-200 transition-colors flex items-center gap-2">
+             ?? <span class="bg-blue-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-black">{{ cartService.cart().length }}</span>
+          </div>
+          <!-- Mini Cart Hover -->
+          <div class="absolute right-0 mt-2 w-80 bg-white shadow-2xl rounded-3xl p-6 border opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all translate-y-2 group-hover:translate-y-0 z-50">
+             <h3 class="font-black text-gray-900 border-b pb-3 mb-4 text-sm uppercase tracking-widest">My Savings Bag</h3>
+             <div class="max-h-64 overflow-y-auto mb-4 -mx-2 px-2 scrollbar-thin">
+               <div *ngFor="let item of cartService.cart()" class="flex justify-between items-center mb-3">
+                  <div class="flex-grow">
+                    <p class="text-[12px] font-black text-gray-800 truncate leading-none mb-1">{{ item.name }}</p>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase">{{ item.vendorName }}</p>
+                  </div>
+                  <span class="text-xs font-black text-orange-600 ml-4">{{ item.price }} EGP</span>
+               </div>
+               <div *ngIf="cartService.cart().length === 0" class="text-center py-4 text-gray-400 font-bold italic text-xs">Bag is Empty... Start Saving!</div>
+             </div>
+             <div class="pt-4 border-t flex justify-between font-black text-blue-800 mb-6">
+                <span>Total Savings:</span>
+                <span>{{ cartService.getTotal() }} EGP</span>
+             </div>
+             <a routerLink="/checkout" 
+                class="block w-full text-center bg-gray-900 hover:bg-black text-white py-4 rounded-2xl font-black text-xs transition-colors shadow-lg active:scale-95 leading-none">
+                SECURE CHECKOUT &rarr;
+             </a>
+          </div>
+        </div>
+
+        <a routerLink="/user-dashboard" class="px-6 py-2.5 rounded-full border border-gray-200 text-gray-700 font-bold hover:bg-gray-50 transition-colors">
+          My Rewards
+        </a>
+        <a routerLink="/admin-dashboard" class="px-6 py-2.5 rounded-full border border-purple-300 bg-purple-50 text-purple-700 font-bold hover:bg-purple-100 transition-colors text-xs uppercase tracking-widest">
+          ⚙️ Admin
+        </a>
+        <a routerLink="/login" class="px-6 py-2.5 rounded-full bg-blue-700 text-white font-bold hover:bg-blue-800 shadow-md transform active:scale-95 transition-all">
+          Sign In
+        </a>
+      </div>
+    </div>
+  </nav>
+  
+  <router-outlet></router-outlet>
+  
+  <footer class="bg-gray-100 py-12 px-6 border-t border-gray-200 mt-20">
+    <div class="max-w-7xl mx-auto text-center">
+      <h2 class="text-3xl font-black text-blue-900 mb-6">Alexandria Last Chance</h2>
+      <p class="text-gray-500 max-w-lg mx-auto mb-10 text-lg font-medium">
+        Helping local buyers save money and enabling merchants to liquidate inventory efficiently across Alexandria.
+      </p>
+      <div class="flex flex-wrap justify-center gap-10 font-black text-gray-500 text-sm uppercase tracking-widest">
+        <a href="#" class="hover:text-blue-600">About Us</a>
+        <a href="#" class="hover:text-blue-600">Contact Support</a>
+        <a href="#" class="hover:text-blue-600">Merchant Join</a>
+        <a href="#" class="hover:text-blue-600 text-orange-600 font-black italic">How it works?</a>
+      </div>
+      <div class="mt-16 pt-8 border-t border-gray-200 text-gray-400 font-bold text-xs uppercase tracking-tighter">
+        &copy; 2026 Alex Last Chance. All rights Reserved. Designed for Alexandria.
+      </div>
+    </div>
+  </footer>

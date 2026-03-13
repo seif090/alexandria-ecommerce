@@ -1,0 +1,42 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@angular/cdk": "^21.2.2",
+    "@angular/material": "^21.2.2",
+    "axios": "^1.13.6",
+    "bcryptjs": "^3.0.3",
+    "bootstrap-icons": "^1.13.1",
+    "cheerio": "^1.2.0",
+    "chrome-launcher": "^1.2.1",
+    "cors": "^2.8.6",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-angular": "^0.577.0",
+    "mongoose": "^9.3.0",
+    "node-cron": "^4.2.1",
+    "puppeteer-core": "^24.39.1",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.3",
+    "twilio": "^5.13.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.27",
+    "nodemon": "^3.1.14",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1"
+  }
+}

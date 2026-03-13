@@ -1,0 +1,26 @@
+{
+  "HOME": {
+    "TITLE": "Alexandria Last Chance",
+    "SUBTITLE": "The Ultimate Hub for Massive Deals & Clearance in Alexandria",
+    "SEARCH_PLACEHOLDER": "Search for offers, shops, categories...",
+    "FIND_DEALS": "Find Deals",
+    "CATEGORY_PROMPT": "What are you looking for?",
+    "FLASH_DEALS": "🔥 Flash Clearance Deals",
+    "VIEW_ALL": "View All",
+    "OFF": "OFF",
+    "ITEMS_LEFT": "Items Left",
+    "GRAB_OFFER": "Grab Offer Now",
+    "ADD_TO_CART": "ADD",
+    "REVIEWS": "Read Reviews"
+  },
+  "VENDOR": {
+    "PORTAL_TITLE": "Vendor Portal",
+    "DASHBOARD": "Manage Your Deals",
+    "NEW_OFFER": "+ New Clearance Offer",
+    "STOCK": "Stock Left",
+    "UNITS": "units",
+    "PRICE": "Clearance Price",
+    "PROMOTED": "Promoted",
+    "PROMOTE": "Promote"
+  }
+}
