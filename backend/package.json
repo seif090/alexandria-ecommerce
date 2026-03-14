@@ -11,9 +11,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "engines": {
-    "node": "18.x"
-  },
   "type": "commonjs",
   "dependencies": {
     "@angular/cdk": "^21.2.2",
