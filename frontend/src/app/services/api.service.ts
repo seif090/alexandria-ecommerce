@@ -6,10 +6,29 @@ import { Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = this.getApiUrl();
   private destroy$ = new Subject<void>();
 
   constructor(private http: HttpClient) {}
+
+  private getApiUrl(): string {
+    // Use environment variable if available (set in Vercel)
+    const envApiUrl = (window as any).__API_URL__ || 
+                      (typeof process !== 'undefined' && (process as any).env?.['NG_APP_API_URL']);
+    
+    if (envApiUrl) {
+      return envApiUrl;
+    }
+
+    // Fallback to backend on same domain
+    const isDev = !window.location.hostname.includes('vercel.app');
+    if (isDev) {
+      return 'http://localhost:3000/api';
+    }
+
+    // For production, use relative API path (proxied by Vercel)
+    return '/api';
+  }
 
   // ============ ANALYTICS ENDPOINTS ============
 
