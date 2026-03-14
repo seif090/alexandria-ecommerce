@@ -357,5 +357,11 @@ async function start() {
   }
 }
 
-start();
-module.exports = { app, server, io };
+// For local development
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  start();
+}
+
+// For Vercel serverless
+module.exports = app;
+module.exports.default = app;
