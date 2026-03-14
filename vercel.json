@@ -1,1 +1,0 @@
-{"rewrites":[{"source":"/api/(.*)","destination":"https://alexandria-api-orpin.vercel.app/api/"},{"source":"/(.*)","destination":"https://frontend-two-tau-52.vercel.app/"}]}
