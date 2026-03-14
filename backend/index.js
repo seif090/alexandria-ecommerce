@@ -53,15 +53,20 @@ async function initializeDatabase() {
         name TEXT NOT NULL,
         description TEXT,
         price REAL,
-        stock INTEGER,
+        discountPrice REAL,
+        stock INTEGER DEFAULT 0,
         vendorId TEXT,
+        category TEXT,
+        images TEXT,
         dealExpiresAt DATETIME,
+        isFeatured INTEGER DEFAULT 0,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
       )`,
       
       `CREATE TABLE IF NOT EXISTS orders (
         id TEXT PRIMARY KEY,
         userId TEXT,
+        items TEXT,
         total REAL,
         status TEXT DEFAULT 'pending',
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -71,7 +76,25 @@ async function initializeDatabase() {
         id TEXT PRIMARY KEY,
         userId TEXT,
         message TEXT,
-        read INTEGER DEFAULT 0,
+        type TEXT DEFAULT 'info',
+        isRead INTEGER DEFAULT 0,
+        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+      )`,
+      
+      `CREATE TABLE IF NOT EXISTS wallets (
+        id TEXT PRIMARY KEY,
+        userId TEXT UNIQUE,
+        balance REAL DEFAULT 0,
+        currency TEXT DEFAULT 'EGP',
+        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+      )`,
+      
+      `CREATE TABLE IF NOT EXISTS reviews (
+        id TEXT PRIMARY KEY,
+        productId TEXT,
+        userId TEXT,
+        rating INTEGER,
+        comment TEXT,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
       )`
     ];
@@ -124,7 +147,18 @@ app.get('/', (req, res) => {
   res.json({ 
     message: 'Alexandria API v1.0',
     status: 'running',
-    database: 'SQLite'
+    database: 'SQLite',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Health check for Vercel
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok',
+    database: db ? 'connected' : 'disconnected',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -235,6 +269,78 @@ app.post('/api/notifications', (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+});
+
+// Wallets
+app.get('/api/wallet/:userId', (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!db) return res.status(500).json({ error: 'DB error' });
+    
+    const result = db.exec('SELECT * FROM wallets WHERE userId = ?', [userId]);
+    if (result.length > 0) {
+      res.json(result[0].values[0]);
+    } else {
+      res.json({ userId, balance: 0, currency: 'EGP' });
+    }
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/wallet', (req, res) => {
+  try {
+    const { userId, amount } = req.body;
+    if (!db) return res.status(500).json({ error: 'DB error' });
+    
+    const id = Date.now().toString();
+    db.run(
+      'INSERT OR REPLACE INTO wallets (id, userId, balance) VALUES (?, ?, (SELECT COALESCE(balance, 0) + ? FROM wallets WHERE userId = ?))',
+      [id, userId, amount, userId]
+    );
+    saveDatabase();
+    
+    res.json({ success: true, walletId: id });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Reviews
+app.get('/api/reviews/:productId', (req, res) => {
+  try {
+    const { productId } = req.params;
+    if (!db) return res.status(500).json({ error: 'DB error' });
+    
+    const result = db.exec('SELECT * FROM reviews WHERE productId = ? LIMIT 50', [productId]);
+    res.json(result.length > 0 ? result[0].values : []);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/reviews', (req, res) => {
+  try {
+    const { productId, userId, rating, comment } = req.body;
+    if (!db) return res.status(500).json({ error: 'DB error' });
+    
+    const id = Date.now().toString();
+    db.run(
+      'INSERT INTO reviews (id, productId, userId, rating, comment) VALUES (?, ?, ?, ?, ?)',
+      [id, productId, userId, rating, comment]
+    );
+    saveDatabase();
+    
+    res.json({ success: true, reviewId: id });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
+  res.status(500).json({ error: 'Internal server error' });
 });
 
 // Start
